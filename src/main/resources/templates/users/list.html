@@ -1,0 +1,82 @@
+<!--头部信息：搜索按钮、添加按钮-->
+<div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for..." id="searchName"/>
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" id="searchNameBtn">搜 索</button>
+                </span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <a class="btn btn-primary" data-toggle="modal" data-target="#flipFlop" role="button" id="addUser">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!--table数据表格-->
+<div id="mainContainer">
+    <div id="mainContainerRepleace">
+        <table class="table table-striped" >
+            <thead>
+                <tr>
+                    <th data-field="id">ID</th>
+                    <th data-field="username">账号</th>
+                    <th data-field="name">姓名</th>
+                    <th data-field="email">邮箱</th>
+                    <th data-field="authorities">角色</th>
+                    <th data-field="operation">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${userModel.userList}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.authorities}"></td>
+                    <td>
+                        <div>
+                            <a class="blog-edit-user" data-toggle="modal" data-target="#flipFlop" role="button" data-th-attr="userId=${user.id}">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            </a>
+                            <a class="blog-delete-user" role="button" data-th-attr="userId=${user.id}">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+        <div th:replace="~{fragments/page :: page}">...</div>
+    </div>
+</div>
+
+<!-- 新增/编辑用户模态框 -->
+<div class="modal fade" id="flipFlop" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalLabel">新增/编辑</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!--将add.html或者edit.html动态添加到此div中-->
+            <div class="modal-body" id="userFormContainer">
+
+            </div>
+            <div class="modal-footer">
+                <!--data-dismiss="modal"-->
+                <button class="btn btn-primary"  id="submitEdit">提交</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../static/custom/js/blog-admins-user.js" th:src="@{/custom/js/blog-admins-user.js}"></script>

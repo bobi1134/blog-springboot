@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--引入header-->
+    <div th:replace="~{fragments/header::header}"></div>
+    <title>首页</title>
+</head>
+<body>
+    <div class="container blog-content-container">
+        <div class="row">
+            <!-- 左侧栏目 -->
+            <div class="col-md-4 col-xl-3">
+                <!--头像-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <span>
+                          <a href="" th:href="'/u/' + ${user.username} + '/blogs'" title="waylau" th:title="${user.username}">
+                              <img th:src="(${user.avatar} == null) or (${user.avatar} == '') ? '/custom/images/avatar-defualt.jpg' : ${user.avatar}" class="blog-avatar blog-avatar-230" th:alt="${#authentication.name}">
+                          </a>
+                        </span>
+                    </div>
+
+                </div>
+                <!--姓名、账号-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2 class="card-text" th:text="${user.name}"></h2>
+                        <h4 class="card-text" th:text="${user.username}"></h4>
+                    </div>
+                </div>
+                <!--邮箱-->
+                <div class="row ">
+                    <div class="col-md-12">
+                        <h5>
+                            <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                            <a href="" th:href="'mailto:'+ ${user.email}" th:text="${user.email}">waylau521@gmail.com</a>
+                        </h5>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- 分类 -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-bars" aria-hidden="true"></i> 分类
+                        <a class="blog-add-catalog float-right" th:if="${isCatalogsOwner}" data-toggle="modal" data-target="#flipFlop" role="button">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                    <div class="panel-body" id="catalogMain">
+                        <ul class="list-group" th:each="catalog : ${catalogs}" th:object="${catalog}" id="catalogRepleace">
+                            <div class="list-group-item">
+                                <!--分类名称-->
+                                <a href="javascript:void(0)" th:attr="catalogId=*{id}" class="blog-query-by-catalog">
+                                    [[*{name}]]
+                                </a>
+                                <span class="float-right">
+                                    <!--编辑分类-->
+                                    <a class="blog-edit-catalog" data-toggle="modal" data-target="#flipFlop" role="button" th:if="${isCatalogsOwner}" th:attr="catalogId=*{id}">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </a>
+                                    <!--删除分类-->
+                                    <a class="blog-delete-catalog" href="javascript:void(0)" th:if="${isCatalogsOwner}" th:attr="catalogId=*{id}">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧栏目 -->
+            <div class="col-md-8 col-xl-9">
+
+                <!-- 工具栏 -->
+                <ul class="nav nav-tabs">
+                    <li class="nav-link" role="presentation" data-th-classappend="${order} eq 'new' ? 'active' : ''" th:attr="url='/u/'+${user.username}+'/blogs?order=new'">
+                        <a href="javascript:void(0)">最新</a>
+                    </li>
+                    <li class="nav-link" role="presentation" data-th-classappend="${order} eq 'hot' ? 'active' : ''" th:attr="url='/u/'+${user.username}+'/blogs?order=hot'">
+                        <a href="javascript:void(0)">最热</a>
+                    </li>
+                    <li role="presentation">
+                        <form class="form-inline mt-2 mt-md-0">
+                            <input type="text" style="display: none"/>
+                            <input class="form-control mr-sm-2" type="text" placeholder="输入标题进行搜索" id="keyword" th:value="${keyword}"/>
+                            <a href="javascript:void(0)" class="btn btn-outline-secondary my-2 my-sm-0" id="searchBlogs"><i class="fa fa-search" aria-hidden="true"></i></a>
+                        </form>
+                    </li>
+                </ul>
+
+                <!-- 博客列表 -->
+                <div id="mainContainer">
+                    <div id="mainContainerRepleace" style="margin-top: 10px">
+                        <div class="panel panel-default" th:each="blog : ${blogList}">
+                            <div class="panel-heading">
+                                <!--标题-->
+                                <a class="text-large" th:text="${blog.title}" th:href="'/u/' + ${blog.user.username} + '/blogs/'+ ${blog.id}"  th:title="${blog.user.username}"></a>
+                            </div>
+
+                            <div class="panel-body">
+                                <!--摘要-->
+                                <div class="" th:text="${blog.summary}"></div>
+
+                                <div style="margin-top: 10px">
+                                    发表于 [[${#dates.format(blog.createTime, 'yyyy-MM-dd HH:mm')}]]
+                                    <i class="fa fa-eye" aria-hidden="true" th:text="${blog.readSize}"></i>
+                                    <i class="fa fa-heart-o" aria-hidden="true" th:text="${blog.voteSize}"></i>
+                                    <i class="fa fa-comment-o" aria-hidden="true" th:text="${blog.commentSize}"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:replace="~{fragments/page :: page}">...</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--添加分类模态框-->
+    <div class="modal fade" id="flipFlop" tabindex="-1" role="dialog"
+         aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalLabel">新增/编辑</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="catalogFormContainer"></div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="modal" id="submitEditCatalog">提交</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/footer::footer}"></div>
+    <script th:inline="javascript">
+        var username = [[${user.username}]];
+        var catalogId = [[${catalogId}]];
+    </script>
+    <script src="../../static/custom/js/blog-userspace-u.js" th:src="@{/custom/js/blog-userspace-u.js}"></script>
+</body>
+</html>

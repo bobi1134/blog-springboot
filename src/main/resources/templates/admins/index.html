@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--引入header-->
+    <div th:replace="~{fragments/header::header}"></div>
+    <title>首页</title>
+</head>
+<body>
+
+    <div class="container blog-content-container">
+        <div class="row">
+            <!-- 左侧栏目 -->
+            <div class="col-md-4 col-xl-3">
+                <!-- 分类 -->
+                <div class="card">
+                    <!--<h5 class="card-header"><i class="fa fa-bars" aria-hidden="true"></i> 菜单</h5>-->
+                    <ul class="list-group" >
+                        <a href="" class="list-group-item" th:each="menu:${menuList.list}" th:title="${menu.name}" th:text="${menu.name}" data-th-attr="url=${menu.url}"></a>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 右侧栏目 -->
+            <div class="col-md-8 col-xl-9">
+                <div class="card" id="rightContainer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--引入footer-->
+    <div th:replace="~{fragments/footer::footer}"></div>
+    <script type="text/javascript" src="../../static/custom/js/blog-admins.js" th:src="@{/custom/js/blog-admins.js}"></script>
+</body>
+</html>

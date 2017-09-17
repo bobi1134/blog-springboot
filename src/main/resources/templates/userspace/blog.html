@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--引入header-->
+    <div th:replace="~{fragments/header::header}"></div>
+    <title th:text="${blogModel.title}"></title>
+</head>
+<body>
+
+    <div class="container blog-content-container">
+
+        <div class="row">
+            <div class="col-md-8">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <!--用户头像-->
+                        <a th:href="'/u/' + ${blogModel.user.username} + '/blogs'" th:title="${blogModel.user.username}">
+                            <img src="" th:src="(${blogModel.user.avatar} == null) or (${blogModel.user.avatar} == '') ? '/custom/images/avatar-defualt.jpg' : ${blogModel.user.avatar}" class="blog-avatar-50">
+                        </a>
+
+                        <!--标题-->
+                        <a th:href="'/u/' + ${blogModel.user.username} + '/blogs/'+ ${blogModel.id}" th:title="${blogModel.user.username}" th:text="${blogModel.title}" class="text-large"></a>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="">
+                            <a href="" th:href="'/u/' + ${blogModel.user.username}" class="card-link" th:text="${blogModel.user.username}" >waylau</a> 发表于 [[${#dates.format(blogModel.createTime, 'yyyy-MM-dd HH:mm')}]]
+                            <i class="fa fa-eye" aria-hidden="true">[[${blogModel.readSize}]]</i>
+                            <i class="fa fa-heart-o" aria-hidden="true">[[${blogModel.voteSize}]]</i>
+                            <i class="fa fa-comment-o" aria-hidden="true">[[${blogModel.commentSize}]]</i>
+                            <!--编辑、删除(需要判断是否为博客拥有者)-->
+                            <a class="btn btn-primary float-right" th:if="${isBlogOwner}" th:href="'/u/' + ${blogModel.user.username}+ '/blogs/edit/'+ ${blogModel.id}">编辑</a>
+                            <a class="btn btn-primary float-right blog-delete-blog" th:if="${isBlogOwner}" th:attr="blogUrl='/u/' + ${blogModel.user.username} + '/blogs/del/'+ ${blogModel.id}">删除</a>
+                        </div>
+
+                        <hr>
+
+                        <!--文章内容-->
+                        <article class="post-content" th:utext="${blogModel.htmlContent}"></article>
+
+                        <hr>
+
+                        <!--分类、标签-->
+                        <div class="card-block">
+                            <h5>分类：
+                                <a th:href="'/u/'+${blogModel.user.username} + '/blogs?catalogId='+${blogModel.catalog.id} " th:text="${blogModel.catalog.name}"></a>
+                            </h5>
+
+                            <h5 >标签：
+                                <a th:each="tag : ${#strings.arraySplit(blogModel.tags , ',')}" th:href="'/u/' + ${blogModel.user.username}  + '/blogs?keyword='+ ${tag}"> <span class="badge badge-default" th:text="${tag}">Web Design</span></a>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        评论
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <textarea class="blog-textarea" placeholder="看帖需留言~" id="commentContent"></textarea>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary float-right" id="submitComment">发表评论</button>
+                        <button class="btn btn-primary float-right" th:if="${currentVote} == null" id="submitVote">点赞</button>
+                        <button class="btn btn-primary float-right" th:if="${currentVote}" th:attr="voteId=${currentVote.id}" id="cancelVote">取消点赞</button>
+
+                    </div>
+
+                    <!--评论内容-->
+                    <ul class="list-group" id="mainContainer">
+                        <li class="list-group-item" id="mainContainerRepleace" th:each="comment,commentStat : ${comments}" th:object="${comment}">
+                            <div class="row">
+                                <h2 class="col-lg-1 col-md-2">
+                                  <a href="" title="">
+                                    <img src="/custom/images/avatar-defualt.jpg" class="blog-avatar-50" alt="waylau">
+                                  </a>
+                                </h2>
+                                <div class="card-text col-lg-11 col-md-10" style="margin-top: 17px;">
+                                    <!--username、楼层、时间-->
+                                    <a th:href="'/u/'+ *{user.username}" th:text="*{user.username}"></a> [[${commentStat.index} + 1]]楼  [[${#dates.format(comment.createTime, 'yyyy-MM-dd HH:mm')}]]
+                                    <!--删除按钮-->
+                                    <a href="javascript:void(0)" class="blog-delete-comment" th:if="${commentOwner} eq *{user.username}" th:attr="commentId=*{id}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                    <!--评论内容-->
+                                    <p th:text="*{content}"></p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 右侧栏目 -->
+            <div class="col-md-4">
+                <!--文章目录-->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-bars" aria-hidden="true"></i> 文章目录
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group">
+                        <li class="list-group-item">Cras justo odio</li>
+                        <li class="list-group-item">Dapibus ac facilisis in</li>
+                        <li class="list-group-item">Morbi leo risus</li>
+                        <li class="list-group-item">Porta ac consectetur ac</li>
+                        <li class="list-group-item">Vestibulum at eros</li>
+                    </ul>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-connectdevelop" aria-hidden="true"></i> 相关博客
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group">
+                            <a href="/u/waylau/blogs/1" class="list-group-item" title="waylau">
+                                Spring Data + Thymeleaf 3 + Bootstrap 4 实现分页器
+                            </a>
+                            <a href="/u/waylau/blogs/1" class="list-group-item" title="waylau">
+                                用大白话聊聊分布式系统
+                            </a>
+                            <a href="/u/waylau/blogs/1" class="list-group-item" title="waylau">
+                                用大白话聊聊分布式系统>
+                            </a>
+                            <a href="/u/waylau/blogs/1" class="list-group-item" title="waylau">
+                                使用 Eclipse Checkstyle Plugin
+                            </a>
+
+                            <a href="/u/waylau/blogs/1" class="list-group-item" title="waylau">
+                                使用 Eclipse Checkstyle Plugin
+                            </a>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--引入footer-->
+    <div th:replace="~{fragments/footer::footer}"></div>
+    <script th:inline="javascript">
+        var blogId = [[${blogModel.id}]];
+        var blogUrl = '/u/' + [[${blogModel.user.username}]] + '/blogs/'+ [[${blogModel.id}]] ;
+    </script>
+    <script src="../../static/custom/js/blog-userspace-blog.js" th:src="@{/custom/js/blog-userspace-blog.js}"></script>
+    </body>
+</html>

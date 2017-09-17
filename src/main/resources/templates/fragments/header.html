@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      th:fragment="header">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- CSRF -->
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <!--thinker-md编辑器-->
+    <link rel="stylesheet" href="../../static/thinker-md/stylesheets/thinker-md.vendor.css" th:href="@{/thinker-md/stylesheets/thinker-md.vendor.css}">
+    <link rel="stylesheet" href="../../static/bootstrap-3.3.7-dist/css/bootstrap.min.css" th:href="@{/bootstrap-3.3.7-dist/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="../../static/font-awesome-4.7.0/css/font-awesome.min.css" th:href="@{/font-awesome-4.7.0/css/font-awesome.min.css}">
+    <link rel="stylesheet" href="../../static/toastr/toastr.min.css" th:href="@{/toastr/toastr.min.css}">
+    <link rel="stylesheet" href="../../static/jQuery-tagEditor/jquery.tag-editor.css" th:href="@{/jQuery-tagEditor/jquery.tag-editor.css}">
+    <link rel="stylesheet" href="../../static/chosen_v1.8.0/chosen.min.css" th:href="@{/chosen_v1.8.0/chosen.min.css}">
+    <link rel="stylesheet" href="../../static/custom/css/blog.css" th:href="@{/custom/css/blog.css}">
+</head>
+<body>
+
+<!--
+                   ii.                                         ;9ABH,
+                  SA391,                                    .r9GG35&G
+                  &#ii13Gh;                               i3X31i;:,rB1
+                  iMs,:,i5895,                         .5G91:,:;:s1:8A
+                   33::::,,;5G5,                     ,58Si,,:::,sHX;iH1
+                    Sr.,:;rs13BBX35hh11511h5Shhh5S3GAXS:.,,::,,1AG3i,GG
+                    .G51S511sr;;iiiishS8G89Shsrrsh59S;.,,,,,..5A85Si,h8
+                   :SB9s:,............................,,,.,,,SASh53h,1G.
+                .r18S;..,,,,,,,,,,,,,,,,,,,,,,,,,,,,,....,,.1H315199,rX,
+              ;S89s,..,,,,,,,,,,,,,,,,,,,,,,,....,,.......,,,;r1ShS8,;Xi
+            i55s:.........,,,,,,,,,,,,,,,,.,,,......,.....,,....r9&5.:X1
+           59;.....,.     .,,,,,,,,,,,...        .............,..:1;.:&s
+          s8,..;53S5S3s.   .,,,,,,,.,..      i15S5h1:.........,,,..,,:99
+          93.:39s:rSGB@A;  ..,,,,.....    .SG3hhh9G&BGi..,,,,,,,,,,,,.,83
+          G5.G8  9#@@@@@X. .,,,,,,.....  iA9,.S&B###@@Mr...,,,,,,,,..,.;Xh
+          Gs.X8 S@@@@@@@B:..,,,,,,,,,,. rA1 ,A@@@@@@@@@H:........,,,,,,.iX:
+         ;9. ,8A#@@@@@@#5,.,,,,,,,,,... 9A. 8@@@@@@@@@@M;    ....,,,,,,,,S8
+         X3    iS8XAHH8s.,,,,,,,,,,...,..58hH@@@@@@@@@Hs       ...,,,,,,,:Gs
+        r8,        ,,,...,,,,,,,,,,.....  ,h8XABMMHX3r.          .,,,,,,,.rX:
+       :9, .    .:,..,:;;;::,.,,,,,..          .,,.               ..,,,,,,.59
+      .Si      ,:.i8HBMMMMMB&5,....                    .            .,,,,,.sMr
+      SS       :: h@@@@@@@@@@#; .                     ...  .         ..,,,,iM5
+      91  .    ;:.,1&@@@@@@MXs.                            .          .,,:,:&S
+      hS ....  .:;,,,i3MMS1;..,..... .  .     ...                     ..,:,.99
+      ,8; ..... .,:,..,8Ms:;,,,...                                     .,::.83
+       s&: ....  .sS553B@@HX3s;,.    .,;13h.                            .:::&1
+        SXr  .  ...;s3G99XA&X88Shss11155hi.                             ,;:h&,
+         iH8:  . ..   ,;iiii;,::,,,,,.                                 .;irHA
+          ,8X5;   .     .......                                       ,;iihS8Gi
+             1831,                                                 .,;irrrrrs&@
+               ;5A8r.                                            .:;iiiiirrss1H
+                 :X@H3s.......                                .,:;iii;iiiiirsrh
+                  r#h:;,...,,.. .,,:;;;;;:::,...              .:;;;;;;iiiirrss1
+                 ,M8 ..,....,.....,,::::::,,...         .     .,;;;iiiiiirss11h
+                 8B;.,,,,,,,.,.....          .           ..   .:;;;;iirrsss111h
+                i@5,:::,,,,,,,,.... .                   . .:::;;;;;irrrss111111
+                9Bi,:,,,,......                        ..r91;;;;;iirrsss1ss1111
+-->
+
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#" th:href="@{~/}">BLOG</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+                    <li><a href="#">Link</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">One more separated link</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+                <!--<ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Link</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                        </ul>
+                    </li>
+                </ul>-->
+
+                <!--登录判断-->
+                <div sec:authorize="isAuthenticated()" class="nav navbar-collapse navbar-right">
+                    <ul class="nav navbar-nav">
+                        <!--<li><a href="#" sec:authentication="name"></a></li>-->
+                        <li class="dropdown">
+                            <a sec:authentication="name" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" th:href="@{'/u/' + ${#authentication.name}} + '/blogs'">个人主页</a></li>
+                                <li><a href="#" th:href="@{'/u/' + ${#authentication.name}} + '/profile'">个人设置</a></li>
+                            </ul>
+                        </li>
+
+
+                        <li style="margin-right: 8px;">
+                            <form th:action="@{/logout}" method="post">
+                                <input type="submit" class="btn btn-success" value="退出" style="margin-top: 8px;"/>
+                            </form>
+                        </li>
+
+                        <a class="btn btn-success" th:href="'/u/' + ${#authentication.name} + '/blogs/add'" style="margin: 8px 0 0 0px;">写博客</a>
+                    </ul>
+                </div>
+
+                <div sec:authorize="isAnonymous()" class="nav navbar-collapse navbar-right">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#" th:href="@{/login}">登录</a></li>
+                        <li><a href="#" th:href="@{/register}">注册</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</body>
+</html>

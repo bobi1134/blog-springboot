@@ -1,0 +1,54 @@
+/** buildscript代码块中脚本优先执行 */
+buildscript {
+	/** ext用于定义动态属性 */
+	ext {
+		springBootVersion = '1.5.6.RELEASE'
+	}
+	/** 自定义版本信息 */
+	ext['thymeleaf.version'] = '3.0.3.RELEASE'
+	ext['thymeleaf-layout-dialect.version'] = '2.2.0'
+	ext['hibernate.version'] = '5.2.8.Final'
+
+	repositories {
+		maven {
+			url 'http://maven.aliyun.com/nexus/content/groups/public/'
+		}
+		mavenCentral()
+	}
+
+	dependencies {
+		/** classpath表示在执行其余的脚本时，ClassLoader可以使用这些依赖项 */
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	maven {
+		url 'http://maven.aliyun.com/nexus/content/groups/public/'
+	}
+	mavenCentral()
+}
+
+/** 依赖 */
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('mysql:mysql-connector-java:6.0.5')
+//	compile('org.springframework.boot:spring-boot-starter-data-elasticsearch')
+//	compile('net.java.dev.jna:jna:4.3.0')
+	compile('org.springframework.boot:spring-boot-starter-security')
+	compile('org.thymeleaf.extras:thymeleaf-extras-springsecurity4:3.0.2.RELEASE')
+	compile('org.apache.commons:commons-lang3:3.5')
+	compile('es.nitaur.markdown:txtmark:0.16')
+	compile('org.springframework.boot:spring-boot-devtools')
+	runtime('com.h2database:h2:1.4.193')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
